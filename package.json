@@ -2,15 +2,21 @@
     "name": "fsc-nemc-api",
     "version": "1.0.0",
     "description": "API to to consuming externar API to Full Stack challenge using Node + Express and Mocha + Chai to test",
-    "main": "index.js",
+    "main": "./src/index.js",
+    "src": "./src/",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/fjah90/fsc-nemc-api.git"
+    },
     "scripts": {
         "start": "node index.js",
         "start:dev": "nodemon index.js",
-        "test": "echo \"Error: no test specified\" && exit 1"
+        "test": "node ./node_modules/mocha/bin/_mocha"
     },
     "keywords": [
         "Node",
         "Express",
+        "ES6",
         "Mocha",
         "Chai"
     ],
@@ -20,10 +26,12 @@
         "body-parser": "^1.20.0",
         "cors": "^2.8.5",
         "express": "^4.18.1",
-        "express-validator": "^6.14.1"
+        "express-validator": "^6.14.1",
+        "node-fetch": "2.0"
     },
     "devDependencies": {
         "chai": "^4.3.6",
+        "chai-http": "^4.3.0",
         "mocha": "^10.0.0",
         "nodemon": "^2.0.16"
     },
