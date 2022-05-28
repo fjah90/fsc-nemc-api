@@ -11,6 +11,7 @@
     "keywords": [
         "Node",
         "Express",
+        "ES6",
         "Mocha",
         "Chai"
     ],
