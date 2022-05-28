@@ -6,18 +6,24 @@ let express = require('express'),
 // Setting up port with express js
 const apiRoute = require('./routes/api.route')
 const app = express();
+
+//parse application/json and look for raw text
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({
-    extended: false
-}));
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.text());
+app.use(bodyParser.json({ type: 'application/json' }));
+
 app.use(cors());
 app.use(express.static(path.join(__dirname, 'dist/fsc-nemc-api')));
 app.use('/', express.static(path.join(__dirname, 'dist/fsc-nemc-api')));
+
+//API routes
 app.use('/api/v1', apiRoute)
 
 // Create port
 const port = process.env.PORT || 4000;
-const server = app.listen(port, () => {
+
+app.listen(port, () => {
     console.log('Connected to port ' + port)
 })
 
