@@ -1,0 +1,32 @@
+{
+    "name": "fsc-nemc-api",
+    "version": "1.0.0",
+    "description": "API to to consuming externar API to Full Stack challenge using Node + Express and Mocha + Chai to test",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "keywords": [
+        "Node",
+        "Express",
+        "Mocha",
+        "Chai"
+    ],
+    "author": "Fernando Aponte",
+    "license": "MIT",
+    "dependencies": {
+        "body-parser": "^1.20.0",
+        "cors": "^2.8.5",
+        "express": "^4.18.1",
+        "express-validator": "^6.14.1"
+    },
+    "devDependencies": {
+        "chai": "^4.3.6",
+        "mocha": "^10.0.0",
+        "nodemon": "^2.0.16"
+    },
+    "engines": {
+        "node": ">=14.0.0",
+        "npm": "<=8.8.0"
+    }
+}
