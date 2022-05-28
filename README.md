@@ -15,6 +15,9 @@ En cuanto a las librerías y frameworks, puede usar la versión que consideres a
 - **Mocha** [https://mochajs.org/]
 - **Chai** [https://www.chaijs.com/]
 
+También se deben crear los tests que validan el API usando Mocha + Chai.
+
+Los tests deben poder correrse usando npm test y el API debe poder iniciarse usando npm start.
 
 ## Intrucciones
 
