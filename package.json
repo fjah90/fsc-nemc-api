@@ -4,6 +4,8 @@
     "description": "API to to consuming externar API to Full Stack challenge using Node + Express and Mocha + Chai to test",
     "main": "index.js",
     "scripts": {
+        "start": "node index.js",
+        "start:dev": "nodemon index.js",
         "test": "echo \"Error: no test specified\" && exit 1"
     },
     "keywords": [
