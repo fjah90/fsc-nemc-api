@@ -31,7 +31,7 @@ let files = {
     },
     getByName: async (req) => {
 
-        return await fetch(apiUrl + '/secret/file/' + req, {
+        return await fetch(apiUrl + '/secret/file/' + req.trim(), {
             method: 'GET',
             headers: headers
         }).then(checkResponseStatus)
