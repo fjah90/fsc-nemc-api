@@ -13,18 +13,18 @@ const failCallback = function (res) {
 //GET
 api.get("/", (req, res) => res.json({ message: "Welcome to API!" }));
 
-api.get('/files', (req, res) => {
-	FilesController.getFiles(req, res)
+api.get('/files/list', async (req, res) => {
+	await FilesController.getFiles(req, res)
 		.then(successCallback(res), failCallback(res))
 });
 
-api.get('/file/:name', (req, res) => {
-	FilesController.getFileByName(req.params.name)
+api.get('/file/:name', async (req, res) => {
+	await FilesController.getFileByName(req.params.name)
 		.then(successCallback(res), failCallback(res))
 });
 
-api.get('/files/data', (req, res) => {
-	FilesController.getFormattedFiles(req, res)
+api.get('/files/data', async (req, res) => {
+	await FilesController.getFormattedFiles(req, res)
 		.then(successCallback(res), failCallback(res))
 });
 
