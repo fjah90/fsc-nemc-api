@@ -18,14 +18,13 @@ api.get('/files/list', async (req, res) => {
 		.then(successCallback(res), failCallback(res))
 });
 
+api.get('/files/data', async (req, res) => {
+	await FilesController.getFormattedFiles(req, res)
+	.then(successCallback(res), failCallback(res))
+});
+
 api.get('/file/:name', async (req, res) => {
 	await FilesController.getFileByName(req.params.name)
 		.then(successCallback(res), failCallback(res))
 });
-
-api.get('/files/data', async (req, res) => {
-	await FilesController.getFormattedFiles(req, res)
-		.then(successCallback(res), failCallback(res))
-});
-
 module.exports = api;
