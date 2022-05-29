@@ -2,7 +2,7 @@ const tbx = require('../services/tbx-echo-server')
 
 async function getFiles() {
 	//list all file
-	return tbx.getAll();
+	return await tbx.getAll();
 }
 
 async function getFileByName(req, res) {
@@ -12,69 +12,69 @@ async function getFileByName(req, res) {
 	return sFile;
 }
 
-async function getFormattedFiles() {
+async function getFormattedFiles(req) {
 
-	let filesName = await this.getFiles();
+	const filesName = 'fileName' in req.query ?
+		{ files: [req.query.fileName] }
+		: await this.getFiles();
 
 	const formaterFiles = async () => {
 		let i = 0;
 		let gulpsCVS = [];
 		while (filesName['files'][i]) {
-			// if (i >= 2) { break; }
 			//Schema
-			let newObject = {
+			let newObj = {
 				"file": "",
 				"lines": []
 			}
 			let f = await tbx.getByName(filesName['files'][i]);
 			if (f !== undefined) {
 				//remove header
-				var cf = f.split("\n").filter(function (e) { return e !== 'file,text,number,hex' });
+				var cf = f.split("\n").filter(t => t !== 'file,text,number,hex');
 
 				if (cf.lenght !== 0) {
 					Object.entries(cf).forEach(item => {
 
 						var lines = item[1].split(",");
-						newObject["file"] = lines[0];
-						var linesFilter = lines.filter(function (e) { return e !== lines[0] });
+						newObj["file"] = lines[0];
+						var linesFilter = lines.filter(t => t !== lines[0]);
 						//Schema
-
-						var newObjectLine = {
+						var newLine = {
 							"text": "",
-							"number": null,
+							"number": 0,
 							"hex": "",
 						}
 						Object.entries(linesFilter).forEach((iteml2, key) => {
 							switch (key) {
 								case 0:
-									newObjectLine["text"] = iteml2[1];
+									newLine["text"] = iteml2[1];
 									break;
 								case 1:
-									newObjectLine["number"] = parseInt(iteml2[1]);
+									newLine["number"] = parseInt(iteml2[1]);
 									break;
 								case 2:
-									newObjectLine["hex"] = iteml2[1];
+									newLine["hex"] = iteml2[1];
 									break;
 							}
 						})
-						newObject["lines"].push(newObjectLine)
+						newObj["lines"].push(newLine)
 					})
 				}
-
-				if (cf.lenght > 0)
-					console.log(cf[i].split(","))
 				//test if empty
 				if (cf != "")
-					gulpsCVS.push(newObject);
+					gulpsCVS.push(newObj);
 			}
 			i++;
 		}
 
-		return gulpsCVS;
+		const response = Array.isArray(gulpsCVS) && gulpsCVS.length
+			? JSON.parse(JSON.stringify(Object.assign({}, gulpsCVS)))
+			: JSON.parse([{ message: 'not found' }])
+
+		return response;
 	}
 
-	return formaterFiles();
-
+	return await formaterFiles();
 }
 
 module.exports = { getFiles, getFileByName, getFormattedFiles };
