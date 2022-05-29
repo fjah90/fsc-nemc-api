@@ -9,7 +9,7 @@
         "url": "https://github.com/fjah90/fsc-nemc-api.git"
     },
     "scripts": {
-        "start": "node index.js",
+        "start": "node ./src/index.js",
         "start:dev": "nodemon index.js",
         "test": "node ./node_modules/mocha/bin/_mocha"
     },

@@ -1,80 +1,104 @@
+'use strict'
+/**
+ * Module Services
+ */
 const tbx = require('../services/tbx-echo-server')
 
+/**
+ * @desc Promise to get all files name
+ *
+ * @returns {Object} Promise wit the Files Name
+ *
+ */
 async function getFiles() {
-	//list all file
-	return tbx.getAll();
+	return await tbx.getAll();
 }
 
+/**
+ * @desc Promise to get files by name
+ *
+ * @param req Requeri String with the file name
+ * @param res Response
+ *
+ * @returns {Object} Promise wit the File data
+ *
+ */
 async function getFileByName(req, res) {
-	//get file by name
 	let file = await tbx.getByName(req, res);
 	let sFile = await file !== undefined ? file.split("\n") : "not found";
 	return sFile;
 }
 
-async function getFormattedFiles() {
+/**
+ * @desc Formatting the File data
+ *
+ * @param req Requeri is not mandatory, must be with the query string fileName
+ *
+ * @returns {Object} Promise wit the formatting File or Files data
+ *
+ */
+async function getFormattedFiles(req) {
 
-	let filesName = await this.getFiles();
+	const filesName = 'fileName' in req.query ?
+		{ files: [(req.query.fileName).trim()] }
+		: await this.getFiles();
 
 	const formaterFiles = async () => {
 		let i = 0;
 		let gulpsCVS = [];
 		while (filesName['files'][i]) {
-			// if (i >= 2) { break; }
-			//Schema
-			let newObject = {
+			let newObj = { //Schema
 				"file": "",
 				"lines": []
 			}
 			let f = await tbx.getByName(filesName['files'][i]);
 			if (f !== undefined) {
-				//remove header
-				var cf = f.split("\n").filter(function (e) { return e !== 'file,text,number,hex' });
+				var cf = f.split("\n").filter(t => t !== 'file,text,number,hex'); //remove header cvs
 
 				if (cf.lenght !== 0) {
 					Object.entries(cf).forEach(item => {
 
-						var lines = item[1].split(",");
-						newObject["file"] = lines[0];
-						var linesFilter = lines.filter(function (e) { return e !== lines[0] });
-						//Schema
+						var lines = item[1].split(","),
+							linesFilter = lines.filter(t => t !== lines[0]),
+							newLine = { //Schema
+								"text": "",
+								"number": 0,
+								"hex": "",
+							};
 
-						var newObjectLine = {
-							"text": "",
-							"number": null,
-							"hex": "",
-						}
 						Object.entries(linesFilter).forEach((iteml2, key) => {
 							switch (key) {
 								case 0:
-									newObjectLine["text"] = iteml2[1];
+									newLine["text"] = iteml2[1];
 									break;
 								case 1:
-									newObjectLine["number"] = parseInt(iteml2[1]);
+									newLine["number"] = parseInt(iteml2[1]);
 									break;
 								case 2:
-									newObjectLine["hex"] = iteml2[1];
+									newLine["hex"] = iteml2[1];
 									break;
 							}
 						})
-						newObject["lines"].push(newObjectLine)
+
+						newObj["file"] = lines[0]
+						newObj["lines"].push(newLine)
 					})
 				}
 
-				if (cf.lenght > 0)
-					console.log(cf[i].split(","))
-				//test if empty
-				if (cf != "")
-					gulpsCVS.push(newObject);
+				if (cf != "") //test if empty
+					gulpsCVS.push(newObj);
 			}
 			i++;
 		}
 
-		return gulpsCVS;
+		const response = Array.isArray(gulpsCVS) && gulpsCVS.length
+			? JSON.parse(JSON.stringify(Object.assign({}, gulpsCVS)))
+			: JSON.parse([{ message: 'not found' }])
+
+		return response;
 	}
 
-	return formaterFiles();
-
+	return await formaterFiles();
 }
 
 module.exports = { getFiles, getFileByName, getFormattedFiles };
