@@ -92,7 +92,7 @@ async function getFormattedFiles(req) {
 		}
 
 		const response = Array.isArray(gulpsCVS) && gulpsCVS.length
-			? JSON.parse(JSON.stringify(Object.assign({}, gulpsCVS)))
+			? JSON.parse(JSON.stringify(Object.assign([{}], gulpsCVS)))
 			: JSON.parse([{ message: 'not found' }])
 
 		return response;
